@@ -43,6 +43,12 @@ class TestBooksCollector:
         collector.set_book_genre('Гордость и предубеждение и зомби', 'Драма')
         assert collector.get_book_genre('Гордость и предубеждение и зомби') == ''
 
+    def test_get_book_genre_returns_correct_genre(self):
+        collector = BooksCollector()
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
+        assert collector.get_book_genre('Гордость и предубеждение и зомби') == 'Ужасы'
+
     def test_get_books_with_specific_genre_returns_correct_books(self):
 
         collector = BooksCollector()
@@ -58,6 +64,24 @@ class TestBooksCollector:
         horror_books = collector.get_books_with_specific_genre('Ужасы')
         assert 'Гордость и предубеждение и зомби' in horror_books
         assert 'Дракула' in horror_books
+
+    
+    def test_get_books_genre_returns_all_books_with_genres(self):
+        collector = BooksCollector()
+        
+        collector.add_new_book('Дракула')
+        collector.add_new_book('Приключения Шерлока Холмса')
+        
+        collector.set_book_genre('Дракула', 'Ужасы')
+        collector.set_book_genre('Приключения Шерлока Холмса', 'Детективы')
+
+        expected_dict = {
+            'Дракула': 'Ужасы',
+            'Приключения Шерлока Холмса': 'Детективы'
+            }
+        
+        assert collector.get_books_genre() == expected_dict
+
 
     def test_get_books_for_children_returns_only_books_without_age_rating(self):
 
@@ -116,4 +140,20 @@ class TestBooksCollector:
         collector.delete_book_from_favorites('Дюна')
 
         assert len(favorites) == 0
+
+
+    def test_get_list_of_favorites_books_returns_all_favorites(self):
+        collector = BooksCollector()
+        
+        collector.add_new_book('Дюна')
+        collector.add_new_book('Малыш и Карлсон')
+        collector.add_new_book('Ривизор')
+        collector.add_new_book('Дракула')
+        
+        collector.add_book_in_favorites('Дюна')
+        collector.add_book_in_favorites('Дракула')
+        
+        expected_favorites = ['Дюна', 'Дракула']
+
+        assert collector.get_list_of_favorites_books() == expected_favorites
 
